@@ -1,0 +1,38 @@
+name: build-db
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-db:
+    name: build-db
+
+    strategy:
+      matrix:
+        os:
+          - macos-13  # Intel
+          - macos-14  # M1
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check Architecture
+        run: uname -m
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: 5.9
+
+      - name: Build Database
+        run: swift run -c release --package-path Database DatabaseBuilder
+
+      - name: Upload Database
+        uses: actions/upload-artifact@v4
+        with:
+          name: sample-${{ matrix.os }}.realm
+          path: sample.realm
