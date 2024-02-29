@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - .github/workflows/*.yml
       - Database/**/*.swift
 
 jobs:
@@ -51,4 +52,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: sample-realm-${{ steps.arch.outputs.arch }}
-          path: sample.realm
+          path: sample-*.realm
