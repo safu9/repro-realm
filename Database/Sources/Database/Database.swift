@@ -17,13 +17,15 @@ public actor Database {
         return realm.objects(Item.self).first?.text
     }
 
-    public func save(_ text: String, to url: URL) async throws {
+    public func save(_ text: String, count: Int, to url: URL) async throws {
         let realm = try await Realm(configuration: .init(inMemoryIdentifier: "db"), actor: self)
         try await realm.asyncWrite {
-            let item = Item()
-            item.text = text
-
-            realm.add(item)
+            let items = (0..<count).map { _ in 
+                let item = Item()
+                item.text = text
+                return item
+            }
+            realm.add(items)
         }
         try realm.writeCopy(toFile: url, encryptionKey: key)
     }

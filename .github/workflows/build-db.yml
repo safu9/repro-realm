@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - Database/**/*.swift
 
 jobs:
   build-db:

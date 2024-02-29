@@ -1,6 +1,7 @@
 import SwiftUI
 import Database
 
+@MainActor
 final class SampleViewModel: ObservableObject {
     @Published var text: String?
 
@@ -8,7 +9,12 @@ final class SampleViewModel: ObservableObject {
 
     init() {
         Task {
-            text = try? await database.load()
+            do {
+                text = try await database.load()
+            } catch {
+                text = "Error"
+                print(error)
+            }
         }
     }
 }
