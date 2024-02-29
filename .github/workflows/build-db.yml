@@ -27,14 +27,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache Swift Package Manager
-        uses: actions/cache@v2
-        with:
-          path: Database/.build
-          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-spm-
-
       - name: Setup Swift
         uses: swift-actions/setup-swift@v1
         with:
@@ -46,7 +38,7 @@ jobs:
           xcode-version: "15.2"
 
       - name: Build Database
-        run: xcrun --sdk macosx swift run -c release --package-path Database DatabaseBuilder
+        run: xcrun --sdk macosx swift run -c release --package-path Database DatabaseBuilder ${{ steps.arch.outputs.arch }}
 
       - name: Upload Database
         uses: actions/upload-artifact@v4
