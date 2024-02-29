@@ -1,0 +1,17 @@
+# Xcode
+xcuserdata/
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcworkspace/contents.xcworkspacedata
+**/xcshareddata/WorkspaceSettings.xcsettings
+
+# Build files
+.build/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Misc
+.DS_Store
