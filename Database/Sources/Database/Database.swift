@@ -2,8 +2,13 @@ import RealmSwift
 import Foundation
 
 public actor Database {
-    private let url = Bundle.module.url(forResource: "sample", withExtension: "realm")
-    private let key = "8wU=AJ2n[{,]CGZ8+z3<I0d0}DwD~`z(o#?m$WO;^ZLY,h*HAl12k+V-^<I679gg".data(using: .ascii)
+
+    // The URL of the Realm file.
+    // - sample-x86_64.realm: Created on Intel Mac, which causes a crash on M1 Mac and iOS.
+    // - sample-arm64.realm: Created on M1 Mac, which seems to have no problem.
+    private let url = Bundle.module.url(forResource: "sample-x86_64", withExtension: "realm")
+
+    private let key = "8wU=AJ2n[{,]CGZ8+z3<I0d0}DwD~`z(o#?m$WO;^ZLY,h*HAl12k+V-^<I679gL".data(using: .ascii)
 
     public init() {}
 
