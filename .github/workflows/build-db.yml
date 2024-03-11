@@ -19,6 +19,9 @@ jobs:
           - macos-14  # M1
     runs-on: ${{ matrix.os }}
 
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_15.2.app
+
     steps:
       - name: Check Architecture
         id: arch
@@ -30,15 +33,12 @@ jobs:
       - name: Cache Swift Package Manager
         uses: actions/cache@v4
         with:
-          path: Database/.build
+          path: |
+            Database/.build
+            ~/Library/Caches/org.swift.swiftpm
           key: ${{ runner.os }}-${{ runner.arch }}-spm-${{ hashFiles('**/Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.arch }}-spm-
-
-      - name: Setup Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: "15.2"
 
       - name: Build Database
         run: xcrun --sdk macosx swift run -c release --package-path Database DatabaseBuilder ${{ steps.arch.outputs.arch }}
