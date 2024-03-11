@@ -27,6 +27,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Cache Swift Package Manager
+        uses: actions/cache@v2
+        with:
+          path: Database/.build
+          key: ${{ runner.os }}-${{ runner.arch }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-spm-
+
       - name: Setup Swift
         uses: swift-actions/setup-swift@v1
         with:
