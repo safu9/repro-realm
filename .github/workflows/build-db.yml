@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - cache
     paths:
       - .github/workflows/*.yml
       - Database/**/*.swift
@@ -12,21 +13,12 @@ jobs:
   build-db:
     name: build-db
 
-    strategy:
-      matrix:
-        os:
-          - macos-13  # Intel
-          - macos-14  # M1
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-14  # M1
 
     env:
       DEVELOPER_DIR: /Applications/Xcode_15.2.app
 
     steps:
-      - name: Check Architecture
-        id: arch
-        run: echo "arch=$(uname -m)" >> $GITHUB_OUTPUT
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -35,16 +27,11 @@ jobs:
         with:
           path: |
             Database/.build
-            ~/Library/Caches/org.swift.swiftpm
-          key: ${{ runner.os }}-${{ runner.arch }}-spm-${{ hashFiles('**/Package.resolved') }}
+            .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-spm-
+            ${{ runner.os }}-spm-
 
       - name: Build Database
-        run: xcrun --sdk macosx swift run -c release --package-path Database DatabaseBuilder ${{ steps.arch.outputs.arch }}
+        run: xcrun --sdk macosx swift run -c release --package-path Database DatabaseBuilder "test"
 
-      - name: Upload Database
-        uses: actions/upload-artifact@v4
-        with:
-          name: sample-realm-${{ steps.arch.outputs.arch }}
-          path: sample-*.realm
