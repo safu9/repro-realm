@@ -15,13 +15,13 @@ let package = Package(
         .executable(name: "DatabaseBuilder", targets: ["DatabaseBuilder"])
     ],
     dependencies: [
-        .package(url: "https://github.com/realm/realm-swift.git", exact: "10.47.0")
     ],
     targets: [
         .target(
             name: "Database",
             dependencies: [
-                .product(name: "RealmSwift", package: "realm-swift")
+                "RealmBinary",
+                "RealmSwift"
             ],
             resources: [
                 .process("./Resources")
@@ -32,6 +32,16 @@ let package = Package(
             dependencies: [
                 "Database"
             ]
+        ),
+        .binaryTarget(
+            name: "RealmBinary",
+            url: "https://github.com/realm/realm-swift/releases/download/v10.46.0/Realm.spm.zip",
+            checksum: "a2d8978b65757e862af326846b550c2e314f821fb7485573b72ac18c2d20006c"
+        ),
+        .binaryTarget(
+            name: "RealmSwift",
+            url: "https://github.com/realm/realm-swift/releases/download/v10.46.0/RealmSwift@15.2.spm.zip",
+            checksum: "c429db7b2b6ea209a962930db7b28dea2134ccd7520daef9e79c6b8ca3d86a77"
         )
     ]
 )
